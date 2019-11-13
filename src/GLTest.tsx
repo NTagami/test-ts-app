@@ -4,39 +4,39 @@ import { DispatchProp } from "react-redux";
 
 import { jsx } from "@emotion/core";
 import { push } from "connected-react-router";
-import { FCHelper, vertical } from "./CommonStyles";
+import { makeFCHelper, vertical } from "./CommonStyles";
 //import Option, { none, some, fromNullable } from 'fp-ts/lib/Option'
 //import { pipe } from 'fp-ts/lib/pipeable'
 
 type Props = DispatchProp;
 
 export const GLTest: React.FC<Props> = ({ dispatch }) => {
-  const helper = new FCHelper();
+  const helper = makeFCHelper();
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const glRef = React.useRef<WebGL2RenderingContext|null>(null);
+  const glRef = React.useRef<WebGL2RenderingContext | null>(null);
 
   React.useEffect(() => {
-    const gl = canvasRef.current?.getContext("webgl2",{
-      preserveDrawingBuffer: false,
-      alpha: false,
-      antialias: false
-    }) ?? null;
+    const gl =
+      canvasRef.current?.getContext("webgl2", {
+        preserveDrawingBuffer: false,
+        alpha: false,
+        antialias: false
+      }) ?? null;
 
     const GL = WebGL2RenderingContext;
     let vertexShader = gl?.createShader(GL.VERTEX_SHADER) ?? null;
     let fragmentShader = gl?.createShader(GL.FRAGMENT_SHADER) ?? null;
 
-    if (gl != null && vertexShader != null && fragmentShader != null){
+    if (gl != null && vertexShader != null && fragmentShader != null) {
       //[gl, vertexShader, fragmentShader]
     }
-
 
     let _ = undefined;
     _ = gl?.deleteShader(fragmentShader);
     fragmentShader = null;
     _ = gl?.deleteShader(vertexShader);
     vertexShader = null;
-/*
+    /*
     let gl: WebGL2RenderingContext|null = null;
 
     

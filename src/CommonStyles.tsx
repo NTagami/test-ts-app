@@ -16,20 +16,32 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// React.FC の中で使用可
-export class FCHelper {
+function makeButton(classes: any, message: string, onClick: () => void) {
+  return (
+    <Button
+      className={classes.button}
+      onClick={onClick}
+      variant="contained"
+      color="primary"
+    >
+      {message}
+    </Button>
+  );
+}
+
+class FCHelper {
   private classes = useStyles();
 
   public button = (message: string, onClick: () => void) => {
-    return (
-      <Button
-        className={this.classes.button}
-        onClick={onClick}
-        variant="contained"
-        color="primary"
-      >
-        {message}
-      </Button>
-    );
+    return makeButton(this.classes, message, onClick);
   };
+
+  public staticButton = (message: string, onClick: () => void) => {
+    return React.useMemo(() => makeButton(this.classes, message, onClick), []);
+  };
+}
+
+// React.FC の中で使用可
+export function makeFCHelper() {
+  return new FCHelper();
 }

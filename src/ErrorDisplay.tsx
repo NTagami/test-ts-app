@@ -6,14 +6,14 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { CommonActionType } from "./action";
-import { FCHelper } from "./CommonStyles";
+import { makeFCHelper } from "./CommonStyles";
 
 type Props = CommonState & DispatchProp;
 
 const ErrorDipsplay: React.FC<Props> = ({ dispatch, error }) => {
-  const helper = new FCHelper();
+  const helper = makeFCHelper();
   return (
     <Dialog
       open={error != null}
@@ -21,7 +21,7 @@ const ErrorDipsplay: React.FC<Props> = ({ dispatch, error }) => {
         dispatch({ type: CommonActionType.CLEAR_ERROR });
       }}
     >
-        <DialogTitle>Error</DialogTitle>
+      <DialogTitle>Error</DialogTitle>
       <DialogContent>
         <DialogContentText>{error ?? ""}</DialogContentText>
       </DialogContent>
