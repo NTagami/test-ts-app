@@ -8,7 +8,7 @@ import { push } from "connected-react-router";
 
 type Props = TodoState & DispatchProp;
 
-const TodoContainer: React.FC<Props> = ({ todos, dispatch }) => {
+export const TodoContainer: React.FC<Props> = ({ todos, dispatch }) => {
   return (
     <TodoComponent
       todos={todos}
@@ -20,7 +20,8 @@ const TodoContainer: React.FC<Props> = ({ todos, dispatch }) => {
     />
   );
 };
-
+/*
 export default connect<TodoState, {}, {}, RootState>(st => st.todoState)(
   TodoContainer
 );
+*/
