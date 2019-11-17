@@ -5,51 +5,59 @@ import { DispatchProp } from "react-redux";
 import { jsx } from "@emotion/core";
 import { push } from "connected-react-router";
 import { makeFCHelper, vertical } from "./CommonStyles";
+import { buildGLScene, GLScene, glError, GLError, GLContext } from "./GLScene";
+import * as E from "fp-ts/lib/Either";
 //import Option, { none, some, fromNullable } from 'fp-ts/lib/Option'
-//import { pipe } from 'fp-ts/lib/pipeable'
+import { pipe } from "fp-ts/lib/pipeable";
 
 type Props = DispatchProp;
+
+function buildScene(canvas: HTMLCanvasElement): E.Either<GLError, GLScene> {
+  /*
+  const gl =
+    canvas.getContext("webgl2", {
+      preserveDrawingBuffer: false,
+      alpha: false,
+      antialias: false
+    }) ?? null;*/
+  const gl = canvas.getContext("webgl2", {}) ?? null;
+
+  if (gl != null) {
+    return pipe(
+      buildGLScene(gl),
+      E.map(scene => {
+        const GL = WebGL2RenderingContext;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.clearColor(1, 0, 0, 1);
+        gl.enable(GL.DEPTH_TEST);
+        gl.depthFunc(GL.LEQUAL);
+        gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+        scene.draw();
+        return scene;
+      })
+    );
+  } else {
+    return E.left(glError("cannot get gl context"));
+  }
+}
 
 export const GLTest: React.FC<Props> = ({ dispatch }) => {
   const helper = makeFCHelper();
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const glRef = React.useRef<WebGL2RenderingContext | null>(null);
+  const sceneRef = React.useRef<GLScene | null>(null);
 
   React.useEffect(() => {
-    const gl =
-      canvasRef.current?.getContext("webgl2", {
-        preserveDrawingBuffer: false,
-        alpha: false,
-        antialias: false
-      }) ?? null;
-
-    const GL = WebGL2RenderingContext;
-    let vertexShader = gl?.createShader(GL.VERTEX_SHADER) ?? null;
-    let fragmentShader = gl?.createShader(GL.FRAGMENT_SHADER) ?? null;
-
-    if (gl != null && vertexShader != null && fragmentShader != null) {
-      //[gl, vertexShader, fragmentShader]
+    if (canvasRef.current != null) {
+      pipe(
+        buildScene(canvasRef.current),
+        E.map(s => (sceneRef.current = s))
+      );
     }
 
-    let _ = undefined;
-    _ = gl?.deleteShader(fragmentShader);
-    fragmentShader = null;
-    _ = gl?.deleteShader(vertexShader);
-    vertexShader = null;
-    /*
-    let gl: WebGL2RenderingContext|null = null;
-
-    
-    const shader = pipe(
-      fromNullable(ctx),
-      Option.chain(x => {
-        gl = x; 
-        return fromNullable(x.createShader(x.VERTEX_SHADER))
-      })
-    )
-*/
-    glRef.current = gl;
-    return () => {};
+    return () => {
+      let _ = sceneRef.current?.release();
+      sceneRef.current = null;
+    };
   }, []);
 
   return (
