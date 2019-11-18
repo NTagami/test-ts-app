@@ -8,7 +8,8 @@ import * as glMatrix from "gl-matrix";
 import { sequenceS } from "fp-ts/lib/Apply";
 import { dummyAction } from "./action";
 
-export type GLContext = WebGL2RenderingContext;
+export type GLContext = WebGLRenderingContext;
+//export type GLContext = WebGL2RenderingContext;
 
 const VERTEX_SHADER_SOURCE = `
 attribute vec3 aVertexPosition;
@@ -25,7 +26,8 @@ const FRAGMENT_SHADER_SOURCE = `void main(void) {
   gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }`;
 
-const GL = WebGL2RenderingContext;
+const GL = WebGLRenderingContext;
+//const GL = WebGL2RenderingContext;
 
 export interface GLError {
   type: "GLError";

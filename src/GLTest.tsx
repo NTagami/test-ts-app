@@ -20,13 +20,15 @@ function buildScene(canvas: HTMLCanvasElement): E.Either<GLError, GLScene> {
       alpha: false,
       antialias: false
     }) ?? null;*/
-  const gl = canvas.getContext("webgl2", {}) ?? null;
+  const gl = canvas.getContext("webgl", {}) ?? null;
+  //const gl = canvas.getContext("webgl2", {}) ?? null;
 
   if (gl != null) {
     return pipe(
       buildGLScene(gl),
       E.map(scene => {
-        const GL = WebGL2RenderingContext;
+        const GL = WebGLRenderingContext;
+        //        const GL = WebGL2RenderingContext;
         gl.viewport(0, 0, canvas.width, canvas.height);
         gl.clearColor(1, 0, 0, 1);
         gl.enable(GL.DEPTH_TEST);
