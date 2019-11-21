@@ -10,14 +10,16 @@ import {
 
 import {
   CommonAction,
-  CommonActionType,
   dummyAction,
   TodoAction,
-  TodoActionType
+  addTodo,
+  errorMessage,
+  clearError
 } from "./action";
 import { CommonState, RootState, TodoState } from "./store";
 import { connectRouter } from "connected-react-router";
 import { History } from "history";
+import { getType } from "typesafe-actions";
 
 const initialTodoState: TodoState = {
   todos: []
@@ -28,7 +30,7 @@ const todoReducer = (
   action: TodoAction
 ): TodoState | Loop<TodoState, Action> => {
   switch (action.type) {
-    case TodoActionType.ADD_TODO:
+    case getType(addTodo):
       return loop(
         produce(state, draft => {
           draft.todos.push(action.payload.todo);
@@ -36,7 +38,7 @@ const todoReducer = (
         Cmd.action(dummyAction(action.payload.todo.title))
       );
     default:
-      //const _: never = t;
+      const _: never = action.type;
       return state;
   }
 };
@@ -46,19 +48,19 @@ const commonReducer: Reducer<CommonState, CommonAction> = (
   action: CommonAction
 ): CommonState => {
   switch (action.type) {
-    case CommonActionType.DUMMY:
+    case getType(dummyAction):
       return state;
-    case CommonActionType.ERROR:
+    case getType(errorMessage):
       return produce(state, draft => {
         draft.error = action.payload.message;
       });
-    case CommonActionType.CLEAR_ERROR:
+    case getType(clearError):
       return produce(state, draft => {
         draft.error = null;
       });
 
     default:
-      //const _: never = t;
+      const _: never = action;
       return state;
   }
 };

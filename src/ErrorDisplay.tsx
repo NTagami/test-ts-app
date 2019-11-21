@@ -7,7 +7,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { CommonActionType } from "./action";
+import { clearError } from "./action";
 import { makeFCHelper } from "./CommonStyles";
 
 type Props = CommonState & DispatchProp;
@@ -18,7 +18,7 @@ const ErrorDipsplay: React.FC<Props> = ({ dispatch, error }) => {
     <Dialog
       open={error != null}
       onClose={() => {
-        dispatch({ type: CommonActionType.CLEAR_ERROR });
+        dispatch(clearError());
       }}
     >
       <DialogTitle>Error</DialogTitle>
@@ -27,7 +27,7 @@ const ErrorDipsplay: React.FC<Props> = ({ dispatch, error }) => {
       </DialogContent>
       <DialogActions>
         {helper.button("OK", () => {
-          dispatch({ type: CommonActionType.CLEAR_ERROR });
+          dispatch(clearError());
         })}
       </DialogActions>
     </Dialog>
