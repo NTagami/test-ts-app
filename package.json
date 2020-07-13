@@ -76,7 +76,7 @@
     "react-app-rewired": "^2.1.5",
     "react-docgen-typescript-loader": "^3.5.0",
     "redux-devtools": "^3.5.0",
-    "standard-version": "^7.0.0",
+    "standard-version": "^8.0.1",
     "tsify": "^4.0.1"
   },
   "cypress-cucumber-preprocessor": {
